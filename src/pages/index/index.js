@@ -7,6 +7,9 @@ import url from 'js/api.js'
 import {Lazyload} from 'mint-ui'
 import {InfiniteScroll} from 'mint-ui'
 import Foot from 'components/Foot.vue'
+import Swiper from 'components/Swiper.vue'
+
+
 
 Vue.use(InfiniteScroll);
 Vue.use(Lazyload);
@@ -21,10 +24,12 @@ var app = new Vue({
     pageSize : 6,
     loading: false,
     allloading: false,
+    bannerList: null
 
   },
   created() {
     this.getLists()
+    this.getBanner()
   },
   methods: {
     getLists() {
@@ -42,14 +47,21 @@ var app = new Vue({
         } else {
           this.lists = this.lists.concat(newlists)
           console.log(this.lists.length)
-          if(this.lists.length >= 20){this.allloading = true}
+          if(this.lists.length >= 60){this.allloading = true}
         }
         this.pageNum += 1
         this.loading = false
       })
+    },
+    getBanner(){
+        axios.get(url.banner)
+        .then((res)=>{
+            this.bannerList = res.data.lists
+        })
     }
   },
   components:{
-      Foot : Foot
+      Foot : Foot,
+      Swiper: Swiper
   }
 })
